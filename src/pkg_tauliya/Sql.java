@@ -162,7 +162,24 @@ public class Sql{
         }
     }
 
+    protected void getAllSold(){
+        String sql ="Select quantity from sales";
+        int i=0;
+        try {
+            Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
 
+            // loop through the result set
+            while (rs.next()) {
+               i=rs.getInt("quantity")+i;
+            }
+            System.out.println("Total Quantity: "+i);
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 
 //    protected ArrayList showLast(){
