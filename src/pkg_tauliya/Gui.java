@@ -63,7 +63,7 @@ public class Gui extends JFrame implements ActionListener {
         add(panel2,BorderLayout.AFTER_LAST_LINE);
         setResizable(false);
         validate();
-
+        System.out.println("hello");
         button_startup.addActionListener(this);
     }
     public void mainMenu(){
