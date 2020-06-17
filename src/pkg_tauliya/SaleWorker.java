@@ -32,8 +32,8 @@ public class SaleWorker extends SwingWorker<ArrayList<Sale>,Sale> implements Act
         dtm.addColumn("Buyer Name");
         dtm.addColumn("Product Name");
         dtm.addColumn("Quantity Bought");
-        dtm.addColumn("SalePrice");
         dtm.addColumn("CostPrice");
+        dtm.addColumn("SalePrice");
         dtm.addColumn("Date Added");
         dtm.addColumn("Sale Id");
         table.setModel(dtm);

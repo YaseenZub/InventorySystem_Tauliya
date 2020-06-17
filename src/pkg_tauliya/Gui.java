@@ -545,7 +545,7 @@ public class Gui extends JFrame implements ActionListener {
                 view_all_sale = (JFrame) obj2.get(0);
                 dtm2 = (DefaultTableModel) obj2.get(1);
                 table2 = saleworker.setUpGUI();
-                table2.removeColumn(table2.getColumnModel().getColumn(8));
+                table2.removeColumn(table2.getColumnModel().getColumn(7));
                 flag_for_sale=1;
                 viewAll_Sale();
             }
@@ -559,8 +559,8 @@ public class Gui extends JFrame implements ActionListener {
                         buyer_name,
                         sold_product_name,
                         sold_quantity,
-                        sold_price,
                         cost_price_sale,
+                        sold_price,
                         sold_product_profit,
                         date2
                 });
