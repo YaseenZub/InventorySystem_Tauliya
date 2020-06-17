@@ -79,7 +79,8 @@ public class Sql{
                 + " sell_saleprice real,\n"
                 + " sell_costprice real, \n"
                 + " date text,\n"
-                + " id integer"
+                + " id integer, \n"
+                + " profit real"
                 + ");";
         try {
             Connection conn = DriverManager.getConnection(url);
@@ -92,8 +93,8 @@ public class Sql{
         }
     }
 
-    public int addSale(String name, int quantity,double sell,double cost,String date,int id){
-        String sql = "INSERT INTO sales(name_buyer, quantity, sell_saleprice,sell_costprice,date,id) VALUES(?,?,?,?,?,?)";
+    public int addSale(String name, int quantity,double sell,double cost,String date,int id,double profit){
+        String sql = "INSERT INTO sales(name_buyer, quantity, sell_saleprice,sell_costprice,date,id,profit) VALUES(?,?,?,?,?,?,?)";
 
         try {
             Connection conn = this.connect();
@@ -104,6 +105,7 @@ public class Sql{
             pstmt.setDouble(4,cost);
             pstmt.setString(5,date);
             pstmt.setInt(6,id);
+            pstmt.setDouble(7,profit);
             pstmt.executeUpdate();
             conn.close();
             return 1;
@@ -154,7 +156,8 @@ public class Sql{
                         rs.getDouble("sell_saleprice")+"\t" +
                         rs.getDouble("sell_costprice")+"\t"+
                         rs.getString("date")+"\t"+
-                        rs.getInt("id"));
+                        rs.getInt("id")+"t"+
+                        rs.getDouble("profit"));
             }
             conn.close();
         } catch (SQLException e) {
@@ -259,9 +262,9 @@ public class Sql{
                 sale.setSale_price(rs.getDouble("sell_saleprice"));
                 sale.setCost_price(rs.getDouble("sell_costprice"));
                 sale.setDate_bought(rs.getString("date"));
+                sale.setProfit(rs.getDouble("profit"));
                 String name=getProductName(rs.getInt("id"));
                 sale.setProduct_name(name);
-                System.out.println("Name:" +name);
                 Sales.add(sale);
                 System.out.println(sale);
             }

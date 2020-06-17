@@ -21,11 +21,11 @@ public class Gui extends JFrame implements ActionListener {
     Sql sql=new Sql();
     String date,date2,buyer_name,sold_product_name;
     int sold_quantity,sold_product_id;
-    double sold_price,cost_price_sale;
+    double sold_price,cost_price_sale,sold_product_profit;
     int flag_for_sale=0;
     boolean flagRender_for_sale=false;
     ArrayList obj=new ArrayList(),obj2=new ArrayList();
-    private JFrame mainmenu,view_all,sale_frame=new JFrame("Add sale"),edit_Product=new JFrame("Edit"),view_all_sale;
+    private JFrame mainmenu,view_all,sale_frame,edit_Product=new JFrame("Edit"),view_all_sale;
     SqlWorker m=new SqlWorker();
     SaleWorker saleworker=new SaleWorker();
     JTextField name,check_name;
@@ -263,6 +263,8 @@ public class Gui extends JFrame implements ActionListener {
         buttons[3].addActionListener(this);
     }
     protected void saleGui(){
+        sale_frame=new JFrame("add sale");
+        sale_frame.setVisible(true);
         sale_frame.setResizable(false);
         sale_frame.setSize(600,600);
         sale_frame.setDefaultCloseOperation(3);
@@ -369,8 +371,8 @@ public class Gui extends JFrame implements ActionListener {
                 if (table2.getSelectedRow() != -1) {
                     // remove selected row from the model
                     int rows = table2.getSelectedRow();
-                    System.out.println(table2.getModel().getValueAt(rows, 7));
-                    String temp = table2.getModel().getValueAt(rows, 7).toString();
+                    System.out.println(table2.getModel().getValueAt(rows, 9));
+                    String temp = table2.getModel().getValueAt(rows, 9).toString();
                     int toDelete=Integer.parseInt(temp);
                     System.out.println(toDelete);
                     dtm2.removeRow(rows);
@@ -508,7 +510,8 @@ public class Gui extends JFrame implements ActionListener {
         }
         else if(e.getSource()==buttons_sale[2]){
             sale_frame.removeAll();
-            sale_frame.dispose();
+            sale_frame.getContentPane().removeAll();
+            sale_frame.setVisible(false);
             mainMenu();
         }
         else if(e.getSource()==buttons_sale[1]){
@@ -520,7 +523,10 @@ public class Gui extends JFrame implements ActionListener {
             cost_price_sale=product.getCostprice();
             sold_product_id=productId;
             sold_product_name=product.getName();
-            if(sql.addSale(buyer_name,sold_quantity,sold_price,product.getCostprice(),date,productId)==1){
+            sold_product_profit=sold_price-cost_price_sale;
+            sold_product_profit=sold_product_profit*sold_quantity;
+            System.out.println(date2);
+            if(sql.addSale(buyer_name,sold_quantity,sold_price,product.getCostprice(),date2,productId,sold_product_profit)==1){
                 sql.updateQuant(product.getQuantity()-sold_quantity,product.getName());
                 sql.updateSold(sold_quantity,product.getName());
                 System.out.println("HEHEHEHE" +product.getQuantity());
@@ -541,8 +547,7 @@ public class Gui extends JFrame implements ActionListener {
                 view_all_sale = (JFrame) obj2.get(0);
                 dtm2 = (DefaultTableModel) obj2.get(1);
                 table2 = saleworker.setUpGUI();
-                TableColumnModel tcm = table2.getColumnModel();
-                table2.removeColumn(table2.getColumnModel().getColumn(7));
+                table2.removeColumn(table2.getColumnModel().getColumn(8));
                 flag_for_sale=1;
                 viewAll_Sale();
             }
@@ -555,8 +560,10 @@ public class Gui extends JFrame implements ActionListener {
                         table2.getRowCount()+1,
                         buyer_name,
                         sold_product_name,
+                        sold_quantity,
                         sold_price,
                         cost_price_sale,
+                        sold_product_profit,
                         date2
                 });
             }
