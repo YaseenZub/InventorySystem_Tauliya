@@ -371,7 +371,6 @@ public class Gui extends JFrame implements ActionListener {
                 if (table2.getSelectedRow() != -1) {
                     // remove selected row from the model
                     int rows = table2.getSelectedRow();
-                    System.out.println(table2.getModel().getValueAt(rows, 9));
                     String temp = table2.getModel().getValueAt(rows, 9).toString();
                     int toDelete=Integer.parseInt(temp);
                     System.out.println(toDelete);
