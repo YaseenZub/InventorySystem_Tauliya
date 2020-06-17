@@ -12,8 +12,6 @@ import java.util.ArrayList;
 public class Main {
     static Gui gui=new Gui();
     public static void main(String[] args) {
-        // write your code here
-//        gui.startUp();
         gui.startUp();
     }
     public static String getDate(){

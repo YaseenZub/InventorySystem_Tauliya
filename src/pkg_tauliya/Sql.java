@@ -325,7 +325,7 @@ public class Sql{
             // set the corresponding param
             pstmt.setInt(1, quantity);
             pstmt.setString(2,name);
-            // update
+            //updated
             pstmt.executeUpdate();
             conn.close();
         } catch (SQLException e) {

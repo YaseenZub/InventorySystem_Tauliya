@@ -373,7 +373,6 @@ public class Gui extends JFrame implements ActionListener {
                     int rows = table2.getSelectedRow();
                     String temp = table2.getModel().getValueAt(rows, 9).toString();
                     int toDelete=Integer.parseInt(temp);
-                    System.out.println(toDelete);
                     dtm2.removeRow(rows);
                     sql.delete_row_sale(toDelete);
                     JOptionPane.showMessageDialog(null, "Selected row deleted successfully");

@@ -34,7 +34,6 @@ public class SaleWorker extends SwingWorker<ArrayList<Sale>,Sale> implements Act
         dtm.addColumn("Quantity Bought");
         dtm.addColumn("SalePrice");
         dtm.addColumn("CostPrice");
-        dtm.addColumn("Profit");
         dtm.addColumn("Date Added");
         dtm.addColumn("Sale Id");
         table.setModel(dtm);
@@ -47,8 +46,7 @@ public class SaleWorker extends SwingWorker<ArrayList<Sale>,Sale> implements Act
                     data[i][3],
                     data[i][4],
                     data[i][5],
-                    data[i][6],
-                    data[i][7]
+                    data[i][6]
             });
 //            j=i;
 //            id=Integer.parseInt(data[i][0]);
@@ -71,20 +69,16 @@ public class SaleWorker extends SwingWorker<ArrayList<Sale>,Sale> implements Act
         sales=sql.getAllSales();
         e=sales.size();
         System.out.println(e);
-        data=new String[e][8];
+        data=new String[e][7];
         for(int i=0;i<e;i++){
             getSale=sales.get(i);
-//            data[i][0]=Integer.toString(getProduct.getId());
             data[i][0]=getSale.getBuyer_name();
             data[i][1]=getSale.getProduct_name();
             data[i][2]=Integer.toString(getSale.getQuantity_bought());
             data[i][3]=Double.toString(getSale.getCost_price());
             data[i][4]=Double.toString(getSale.getSale_price());
-            data[i][5]=Double.toString(getSale.getProfit());
-            data[i][6]=getSale.getDate_bought();
-            System.out.println(data[i][6]);
-            data[i][7]=Integer.toString(getSale.getSale_id());
-//            counter++;
+            data[i][5]=getSale.getDate_bought();
+            data[i][6]=Integer.toString(getSale.getSale_id());
         }
         return sales;
 

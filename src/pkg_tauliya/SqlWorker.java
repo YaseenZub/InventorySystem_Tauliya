@@ -71,14 +71,12 @@ public class SqlWorker extends SwingWorker<ArrayList<Product>,Product> implement
         data=new String[e][6];
         for(int i=0;i<e;i++){
             getProduct=products.get(i);
-//            data[i][0]=Integer.toString(getProduct.getId());
             data[i][0]=getProduct.getName();
             data[i][1]=Integer.toString(getProduct.getQuantity());
             data[i][2]=Integer.toString(getProduct.getSold_quantity());
             data[i][3]=Double.toString(getProduct.getCostprice());
             data[i][4]=Double.toString(getProduct.getSaleprice());
             data[i][5]=getProduct.getDateAdded();
-//            counter++;
         }
         return products;
 
