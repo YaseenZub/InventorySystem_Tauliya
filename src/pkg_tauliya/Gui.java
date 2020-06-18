@@ -72,6 +72,11 @@ public class Gui extends JFrame implements ActionListener {
         mainmenu.setVisible(true);
         mainmenu.setLayout(null);
         mainmenu.setDefaultCloseOperation(3);
+        JLabel label_profit=new JLabel(Double.toString(sql.getProfits()));
+        mainmenu.add(label_profit);
+        label_profit.setBounds(115,180,175,40);
+        label_profit.setFont(new Font("Calibri",Font.BOLD+Font.ITALIC,40));
+        label_profit.setForeground(Color.WHITE);
         mainmenu.getContentPane().setBackground(new Color(121,53,112));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         button_addProduct=new JButton("Add Product");
@@ -106,7 +111,6 @@ public class Gui extends JFrame implements ActionListener {
         button_viewSale.addActionListener(this);
     }
     protected void addProduct(){
-//        quantity=new TextFormatter();
         mainmenu.setLayout(null);
         JLabel[] label=new JLabel[7];
         label[0]=new JLabel("ADD PRODUCT");
@@ -363,7 +367,7 @@ public class Gui extends JFrame implements ActionListener {
     }
     protected void viewAll_Sale() {
 //        table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        delete_sale= new JButton("Remove");
+        delete_sale = new JButton("Remove");
         delete_sale.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -372,17 +376,18 @@ public class Gui extends JFrame implements ActionListener {
                     // remove selected row from the model
                     int rows = table2.getSelectedRow();
                     String temp = table2.getModel().getValueAt(rows, 9).toString();
-                    int toDelete=Integer.parseInt(temp);
+                    int toDelete = Integer.parseInt(temp);
                     dtm2.removeRow(rows);
                     sql.delete_row_sale(toDelete);
                     JOptionPane.showMessageDialog(null, "Selected row deleted successfully");
                 }
             }
         });
-        button_back_view_sale=new JButton("Back");
+        button_back_view_sale = new JButton("Back");
         button_back_view_sale.addActionListener(this);
-        view_all_sale.add(button_back_view_sale,BorderLayout.WEST);
-        view_all_sale.add(delete_sale,BorderLayout.SOUTH);
+        view_all_sale.add(button_back_view_sale, BorderLayout.WEST);
+        view_all_sale.add(delete_sale, BorderLayout.SOUTH);
+
     }
     public void actionPerformed(ActionEvent e){
         if(e.getSource()==button_startup){
@@ -420,26 +425,32 @@ public class Gui extends JFrame implements ActionListener {
 
         }
         else if(e.getSource()==button_adding){
-            try{
-                quant=quantity.getInt();
-                selling=sell_price.getDouble();
-                cost=cost_price.getDouble();
-                name1=name.getText();
-                date=Main.getDate();
-                sql.connect();
-                sql.createNewTable();
-                if(sql.addProduct(name1,quant,cost,selling,date)==1){
-                    JOptionPane.showMessageDialog(mainmenu,"You have added : \t" + name1 +"Quantity:"+quant+"\t" +
-                            "cost:"+cost+"\tselling"+selling);
-                    flag_render=true;
+            try {
+                quant = quantity.getInt();
+                selling = sell_price.getDouble();
+                cost = cost_price.getDouble();
+                if (cost >= selling) {
+                    JOptionPane.showMessageDialog(mainmenu, "CostPrice cant be greater than sell price you idiot");
+                    mainmenu.removeAll();
+                    mainmenu.dispose();
+                    mainMenu();
+                } else {
+                    name1 = name.getText();
+                    date = Main.getDate();
+                    sql.connect();
+                    sql.createNewTable();
+                    if (sql.addProduct(name1, quant, cost, selling, date) == 1) {
+                        JOptionPane.showMessageDialog(mainmenu, "You have added : \t" + name1 + "Quantity:" + quant + "\t" +
+                                "cost:" + cost + "\tselling" + selling);
+                        flag_render = true;
+                    } else {
+                        JOptionPane.showMessageDialog(mainmenu, "There is an error while connecting to database, You may" +
+                                "have entered a name that already exists");
+                    }
                 }
-                else {
-                    JOptionPane.showMessageDialog(mainmenu,"There is an error while connecting to database, You may" +
-                            "have entered a name that already exists");
+                }catch(NumberFormatException err){
+                    System.out.println("The error is with number");
                 }
-            }catch (NumberFormatException err){
-                System.out.println("The error is with number");
-            }
 
         }
         else if(e.getSource()==button_back_add){
@@ -501,7 +512,6 @@ public class Gui extends JFrame implements ActionListener {
                     productId=product.getId();
                     System.out.println("I am a productID"+productId);
                     renderSale(product);
-
                     System.out.println("GOT A PRODUCT");
                 }
             }
@@ -524,7 +534,7 @@ public class Gui extends JFrame implements ActionListener {
             sold_product_profit=sold_price-cost_price_sale;
             sold_product_profit=sold_product_profit*sold_quantity;
             System.out.println(date2);
-            if(sql.addSale(buyer_name,sold_quantity,sold_price,product.getCostprice(),date2,productId,sold_product_profit)==1){
+            if(sql.addSale(buyer_name,sold_quantity,sold_price,product.getCostprice(),date2,productId,sold_product_profit)==1 &&sold_price>=cost_price_sale){
                 sql.updateQuant(product.getQuantity()-sold_quantity,product.getName());
                 sql.updateSold(sold_quantity,product.getName());
                 System.out.println("HEHEHEHE" +product.getQuantity());
@@ -537,6 +547,16 @@ public class Gui extends JFrame implements ActionListener {
                 reRender_sale=true;
                 flagRender_for_sale=true;
                 sql.selectAllSales();
+                JOptionPane.showMessageDialog(null,"Sale Added Successfully");
+                if(flagRender_for_sale==true) {
+                    sale_frame.removeAll();
+                    sale_frame.getContentPane().removeAll();
+                    sale_frame.setVisible(false);
+                    mainMenu();
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"");
             }
         }
         else if(e.getSource()==button_viewSale){
@@ -545,7 +565,7 @@ public class Gui extends JFrame implements ActionListener {
                 view_all_sale = (JFrame) obj2.get(0);
                 dtm2 = (DefaultTableModel) obj2.get(1);
                 table2 = saleworker.setUpGUI();
-                table2.removeColumn(table2.getColumnModel().getColumn(7));
+                table2.removeColumn(table2.getColumnModel().getColumn(8));
                 flag_for_sale=1;
                 viewAll_Sale();
             }

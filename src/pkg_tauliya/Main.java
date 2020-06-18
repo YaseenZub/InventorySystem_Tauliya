@@ -13,6 +13,8 @@ public class Main {
     static Gui gui=new Gui();
     public static void main(String[] args) {
         gui.startUp();
+        Sql sql=new Sql();
+        sql.getProfits();
     }
     public static String getDate(){
         LocalDateTime dateTime=LocalDateTime.now();

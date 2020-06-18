@@ -320,6 +320,7 @@ public class Sql{
     protected void updateQuant(int quantity,String name) {
         String sql = "UPDATE Products SET capacity = ? WHERE name= ?";
         try {
+            System.out.println("Quantity is "+ quantity);
             Connection conn=this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql);
             // set the corresponding param
@@ -425,4 +426,24 @@ public class Sql{
             }
             return null;
         }
+        protected double getProfits(){
+            String sql="Select profit from sales";
+            try {
+                Connection conn = this.connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                double profit=0;
+                while (rs.next()){
+                    profit=profit+rs.getDouble("profit");
+                }
+                conn.close();
+                return profit;
+            }
+            catch (Exception e){
+                System.out.println("Error in get Profits");
+                System.out.println(e.getMessage());
+            }
+            return 0;
+    }
+
 }
